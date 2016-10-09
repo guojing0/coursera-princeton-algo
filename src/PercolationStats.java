@@ -1,7 +1,7 @@
-package org.guoj;
-
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
+
+// import java.util.Arrays;
 
 public class PercolationStats {
 
@@ -18,21 +18,17 @@ public class PercolationStats {
             Percolation percolation = new Percolation(n);
             int openNum = 0;
 
-            for (int j = 0; j < Math.pow(n, 2); j++) {
-                int row = StdRandom.uniform(1, n + 1); // TODO consider +1 or not
+            while (!percolation.percolates()) {
+                int row = StdRandom.uniform(1, n + 1);
                 int column = StdRandom.uniform(1, n + 1);
 
                 if (!percolation.isOpen(row, column)) {
                     percolation.open(row, column);
                     ++openNum;
                 }
-
-                if (percolation.percolates()) {
-                    prob[i] = openNum / Math.pow(n, 2);
-                }
             }
+            prob[i] = openNum / Math.pow(n, 2);
         }
-
     }
 
     public double mean() {
@@ -60,5 +56,6 @@ public class PercolationStats {
         System.out.println("mean                    = " + p.mean());
         System.out.println("stddev                  = " + p.stddev());
         System.out.println("95% confidence interval = " + p.confidenceLo() + ", " + p.confidenceHi());
+        // System.out.println(Arrays.toString(p.prob));
     }
 }

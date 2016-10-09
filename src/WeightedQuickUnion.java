@@ -1,5 +1,3 @@
-package org.guoj;
-
 public class WeightedQuickUnion {
 
     private int[] id, sz;

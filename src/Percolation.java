@@ -1,5 +1,3 @@
-package org.guoj;
-
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation { // open is true, close false
@@ -14,14 +12,6 @@ public class Percolation { // open is true, close false
 
         union = new WeightedQuickUnionUF(n * n + 2); // first and last always open
         grid = new boolean[n][n];
-
-        for (int i = 1; i <= n; i++) {
-            union.union(0, i);
-        }
-        int lastNum = n * n + 1;
-        for (int i = n * n - n + 1; i < lastNum; i++) {
-            union.union(lastNum, i);
-        }
     }
 
     public void open(int i, int j) {
@@ -39,14 +29,21 @@ public class Percolation { // open is true, close false
         if (j > 1 && grid[i - 1][j - 2]) { // left
             union.union(union.find(num), union.find(num - 1));
         }
-        if (j < grid.length && grid[i - 1][j]) { // right j - 1?
+        if (j < grid.length && grid[i - 1][j]) { // right
             union.union(union.find(num), union.find(num + 1));
         }
         if (i > 1 && grid[i - 2][j - 1]) { // up
             union.union(union.find(num), union.find(num - grid.length));
         }
-        if (i < grid.length && grid[i][j - 1]) { // down i - 1?
+        if (i < grid.length && grid[i][j - 1]) { // down
             union.union(union.find(num), union.find(num + grid.length));
+        }
+
+        if (i == 1) {
+            union.union(0, num);
+        }
+        if (i == grid.length) {
+            union.union(grid.length * grid.length + 1, num); // len * len + 1 : last number
         }
     }
 
@@ -78,6 +75,15 @@ public class Percolation { // open is true, close false
     }
 
     public static void main(String[] args) {
-
+        Percolation p = new Percolation(4);
+        p.open(1, 1);
+        p.open(2, 1);
+        p.open(3, 1);
+        p.open(4, 1);
+        p.open(1, 4);
+        p.open(2, 4);
+        p.open(4, 4);
+        System.out.println(p.isFull(4, 4));
+        System.out.println(p.percolates());
     }
 }

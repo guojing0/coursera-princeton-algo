@@ -1,5 +1,3 @@
-package org.guoj;
-
 public class UnionFind {
 
     private int id[];
