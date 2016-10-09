@@ -1,8 +1,6 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-// import java.util.Arrays;
-
 public class PercolationStats {
 
     private double[] prob;
@@ -56,6 +54,5 @@ public class PercolationStats {
         System.out.println("mean                    = " + p.mean());
         System.out.println("stddev                  = " + p.stddev());
         System.out.println("95% confidence interval = " + p.confidenceLo() + ", " + p.confidenceHi());
-        // System.out.println(Arrays.toString(p.prob));
     }
 }
