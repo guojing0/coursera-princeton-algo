@@ -16,7 +16,7 @@ public class WeightedQuickUnion {
 
     public int root(int i) {
         while (i != id[i]) {
-            id[i] = id[id[i]];
+            id[i] = id[id[i]]; // magic trick
             i = id[i];
         }
         return i;
@@ -42,11 +42,17 @@ public class WeightedQuickUnion {
     }
 
     public static void main(String[] args) {
-        WeightedQuickUnion wqu = new WeightedQuickUnion(6);
-        wqu.union(0, 2);
+        WeightedQuickUnion wqu = new WeightedQuickUnion(8);
+        wqu.union(2, 7);
+        wqu.union(6, 7);
         wqu.union(1, 2);
-        wqu.union(4, 3);
+        wqu.union(0, 1);
         wqu.union(3, 2);
-        System.out.println(wqu.connected(1, 4));
+        wqu.union(4, 3);
+        wqu.union(2, 7);
+
+        for (int i : wqu.id) {
+            System.out.println(i);
+        }
     }
 }
