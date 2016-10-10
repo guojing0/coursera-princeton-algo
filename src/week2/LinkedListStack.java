@@ -1,5 +1,6 @@
+package week2;
+
 import java.util.Iterator;
-import java.util.Objects;
 
 public class LinkedListStack<Item> implements Iterable<Item> {
 

@@ -1,3 +1,5 @@
+package week2;
+
 public class LinkedListQueue<Item> {
 
     private Node first, last;
