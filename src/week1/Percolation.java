@@ -1,3 +1,5 @@
+package week1;
+
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation { // open is true, close false
@@ -22,9 +24,10 @@ public class Percolation { // open is true, close false
             throw new IndexOutOfBoundsException("column index j out of bounds");
         }
 
-        grid[i - 1][j - 1] = true;
-
         int num = grid.length * i - grid.length + j;
+        int lastNum = grid.length * grid.length + 1;
+
+        grid[i - 1][j - 1] = true;
 
         if (j > 1 && grid[i - 1][j - 2]) { // left
             union.union(union.find(num), union.find(num - 1));
@@ -42,8 +45,11 @@ public class Percolation { // open is true, close false
         if (i == 1) {
             union.union(0, num);
         }
-        if (i == grid.length) {
-            union.union(grid.length * grid.length + 1, num); // len * len + 1 : last number
+
+        for (int k = 1; k < grid.length + 1; k++) {
+            if (isFull(grid.length, k)) {
+                union.union(lastNum, lastNum - grid.length + k - 1);
+            }
         }
     }
 
@@ -75,15 +81,13 @@ public class Percolation { // open is true, close false
     }
 
     public static void main(String[] args) {
-        Percolation p = new Percolation(4);
+        Percolation p = new Percolation(3);
         p.open(1, 1);
         p.open(2, 1);
         p.open(3, 1);
-        p.open(4, 1);
-        p.open(1, 4);
-        p.open(2, 4);
-        p.open(4, 4);
-        System.out.println(p.isFull(4, 4));
+        p.open(1, 3);
+        p.open(3, 3);
+        System.out.println(p.isFull(3, 3));
         System.out.println(p.percolates());
     }
 }

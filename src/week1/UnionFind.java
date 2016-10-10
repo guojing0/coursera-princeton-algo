@@ -1,3 +1,5 @@
+package week1;
+
 public class UnionFind {
 
     private int id[];
