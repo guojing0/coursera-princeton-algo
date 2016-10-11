@@ -82,16 +82,35 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class ListIterator implements Iterator<Item> {
+        private Item[] iter = arr.clone();
+        private int i = n;
 
         public boolean hasNext() {
-            return n > 0;
+            return i > 0;
         }
 
         public Item next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return dequeue();
+
+            int nth = StdRandom.uniform(i);
+            Item temp = iter[nth];
+
+            if (nth == 0) {
+                for (int j = 1; j < i; j++) {
+                    iter[j - 1] = iter[j];
+                }
+            } else if (nth == i - 1) {
+                iter[nth] = null;
+            } else {
+                for (int j = nth; j < i - 1; j++) {
+                    iter[j] = iter[j + 1];
+                }
+            }
+            --i;
+
+            return temp;
         }
 
         public void remove() {
@@ -104,13 +123,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         foo.enqueue(1);
         foo.enqueue(2);
         foo.enqueue(3);
-
         Iterator<Integer> bar = foo.iterator();
-        // Iterator<Integer> buz = foo.iterator();
+
         while (bar.hasNext()) {
             System.out.println(bar.next());
         }
-        // System.out.println(buz.hasNext());
+
+        System.out.println(bar.hasNext());
     }
 
 }
