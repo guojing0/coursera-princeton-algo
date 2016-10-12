@@ -1,10 +1,9 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
+public class Deque<Item> implements Iterable<Item> {
 
     private Node pre, post;
-    private Node first; // TODO delete anyway just for test here
     private int n = 0;
 
     private class Node {
@@ -37,7 +36,7 @@ public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
         newNode.val = item;
 
         newNode.prev = pre;
-        newNode.next = newNode.prev.next;
+        newNode.next = pre.next;
 
         pre.next.prev = newNode;
         pre.next = newNode;
@@ -50,54 +49,48 @@ public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
             throw new NullPointerException();
         }
 
-        if (isEmpty()) {
-            addFirst(item);
-        } else {
-            Node last = new Node();
-            last.val = item;
+        Node newNode = new Node();
+        newNode.val = item;
 
-            Node temp = first;
-            while (temp.next != null) {
-                temp = temp.next;
-            }
-            temp.next = last;
-            ++n;
-        }
+        newNode.next = post;
+        newNode.prev = post.prev;
+
+        post.prev.next = newNode;
+        post.prev = newNode;
+
+        ++n;
     }
 
-    public Item removeFirst() {
+    public Item removeFirst() { // TODO if I can do better
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
 
-        Item temp = pre.next.val;
+        Node temp = pre.next;
+        Item tempVal = temp.val;
 
         pre.next = pre.next.next;
         pre.next.prev = pre;
-        pre.next = null;
+        temp = null;
 
         --n;
-        return temp;
+        return tempVal;
     }
 
-    public Item removeLast() {
+    public Item removeLast() { // TODO if I can do better
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
 
-        if (n == 1) { // when first is the last item
-            return removeFirst();
-        } else {
-            Node temp = first;
-            while (temp.next.next != null) {
-                temp = temp.next;
-            }
+        Node temp = post.prev;
+        Item tempVal = temp.val;
 
-            Item item = temp.next.val;
-            temp.next = null;
-            --n;
-            return item;
-        }
+        post.prev = post.prev.prev;
+        post.prev.next = post;
+        temp = null;
+
+        --n;
+        return tempVal;
     }
 
     public Iterator<Item> iterator() {
@@ -105,10 +98,11 @@ public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
     }
 
     private class ListIterator implements Iterator<Item> {
-        private Node current = first;
+        private Node current = pre.next;
+        private int i = n;
 
         public boolean hasNext() {
-            return current != null;
+            return i > 0;
         }
 
         public Item next() {
@@ -117,6 +111,8 @@ public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
             }
             Item item = current.val;
             current = current.next;
+            --i;
+
             return item;
         }
 
@@ -127,8 +123,10 @@ public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
 
     public static void main(String[] args) {
         Deque<Integer> foo = new Deque<>();
-        foo.addFirst(2);
-        foo.addFirst(4);
+
+        foo.addLast(10);
+        foo.addFirst(20);
+
         System.out.println(foo.removeFirst());
         System.out.println(foo.removeFirst());
     }

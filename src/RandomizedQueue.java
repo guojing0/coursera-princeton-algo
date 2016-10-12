@@ -98,7 +98,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (int i = 0; i < 10; i++) {
             foo.enqueue(i);
         }
-        // Iterator<Integer> bar = foo.iterator();
 
         for (int i = 0; i < 10; i++) {
             System.out.println(foo.dequeue());
