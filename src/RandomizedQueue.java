@@ -32,28 +32,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         arr[n++] = item;
     }
 
-    public Item dequeue() { // TODO see if I can do it better
+    public Item dequeue() { // Order does not matter coz nth is random
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
 
         int nth = StdRandom.uniform(n);
         Item temp = arr[nth];
-
-        if (nth == 0) {
-            for (int i = 1; i < n; i++) {
-                arr[i - 1] = arr[i];
-            }
-            arr[n - 1] = null;
-        } else if (nth == n - 1) {
-            arr[nth] = null;
-        } else {
-            for (int i = nth; i < n - 1; i++) {
-                arr[i] = arr[i + 1];
-            }
-            arr[n - 1] = null;
-        }
-        --n;
+        arr[nth] = arr[--n]; // subtract n first then index
 
         if (n > 0 && n < arr.length / 4) {
             resize(arr.length / 2);
@@ -96,19 +82,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
             int nth = StdRandom.uniform(i);
             Item temp = iter[nth];
-
-            if (nth == 0) {
-                for (int j = 1; j < i; j++) {
-                    iter[j - 1] = iter[j];
-                }
-            } else if (nth == i - 1) {
-                iter[nth] = null;
-            } else {
-                for (int j = nth; j < i - 1; j++) {
-                    iter[j] = iter[j + 1];
-                }
-            }
-            --i;
+            iter[nth] = iter[--i];
 
             return temp;
         }
@@ -120,16 +94,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     public static void main(String[] args) {
         RandomizedQueue<Integer> foo = new RandomizedQueue<>();
-        foo.enqueue(1);
-        foo.enqueue(2);
-        foo.enqueue(3);
-        Iterator<Integer> bar = foo.iterator();
 
-        while (bar.hasNext()) {
-            System.out.println(bar.next());
+        for (int i = 0; i < 10; i++) {
+            foo.enqueue(i);
         }
+        // Iterator<Integer> bar = foo.iterator();
 
-        System.out.println(bar.hasNext());
+        for (int i = 0; i < 10; i++) {
+            System.out.println(foo.dequeue());
+        }
     }
 
 }
