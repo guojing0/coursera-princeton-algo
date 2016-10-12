@@ -1,23 +1,27 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> implements Iterable<Item> {
+public class Deque<Item> implements Iterable<Item> { // TODO debug removeFirst()
 
-    private Node first;
-    private int n;
+    private Node pre, post;
+    private Node first; // TODO delete anyway just for test here
+    private int n = 0;
 
     private class Node {
         private Item val;
+        private Node prev;
         private Node next;
     }
 
     public Deque() {
-        first = null;
-        n = 0;
+        pre = new Node();
+        post = new Node();
+        pre.next = post;
+        post.prev = pre;
     }
 
     public boolean isEmpty() {
-        return first == null;
+        return n == 0;
     }
 
     public int size() {
@@ -29,10 +33,15 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NullPointerException();
         }
 
-        Node oldFirst = first;
-        first = new Node();
-        first.val = item;
-        first.next = oldFirst;
+        Node newNode = new Node();
+        newNode.val = item;
+
+        newNode.prev = pre;
+        newNode.next = newNode.prev.next;
+
+        pre.next.prev = newNode;
+        pre.next = newNode;
+
         ++n;
     }
 
@@ -61,10 +70,14 @@ public class Deque<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        Item item = first.val;
-        first = first.next;
+        Item temp = pre.next.val;
+
+        pre.next = pre.next.next;
+        pre.next.prev = pre;
+        pre.next = null;
+
         --n;
-        return item;
+        return temp;
     }
 
     public Item removeLast() {
@@ -114,16 +127,10 @@ public class Deque<Item> implements Iterable<Item> {
 
     public static void main(String[] args) {
         Deque<Integer> foo = new Deque<>();
-        foo.addLast(1);
-        foo.addLast(2);
-        foo.addLast(3);
-        Iterator<Integer> bar = foo.iterator();
-        foo.removeFirst();
-        foo.removeFirst();
-        foo.removeFirst();
-        Iterator<Integer> buz = foo.iterator();
-
-        System.out.println(bar.hasNext() + " " + buz.hasNext());
+        foo.addFirst(2);
+        foo.addFirst(4);
+        System.out.println(foo.removeFirst());
+        System.out.println(foo.removeFirst());
     }
 
 }
