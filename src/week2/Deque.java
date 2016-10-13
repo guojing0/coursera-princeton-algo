@@ -126,11 +126,11 @@ public class Deque<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         Deque<Integer> foo = new Deque<>();
 
-        foo.addLast(10);
+        // foo.addLast(10);
         foo.addFirst(20);
 
         System.out.println(foo.removeFirst());
-        System.out.println(foo.removeFirst());
+        // System.out.println(foo.removeFirst());
     }
 
 }
