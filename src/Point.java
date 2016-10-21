@@ -96,12 +96,13 @@ public class Point implements Comparable<Point> {
      *
      * @return the Comparator that defines this ordering on points
      */
-    private abstract class SlopeOrder implements Comparator<Point> {
+    public Comparator<Point> slopeOrder= new SlopeOrder();
+    private class SlopeOrder implements Comparator<Point> {
         public int compare(Point p, Point q) {
             if (slopeTo(p) < slopeTo(q)) {
-                return 1;
-            } else if (slopeTo(p) > slopeTo(q)) {
                 return -1;
+            } else if (slopeTo(p) > slopeTo(q)) {
+                return 1;
             } else {
                 return 0;
             }
