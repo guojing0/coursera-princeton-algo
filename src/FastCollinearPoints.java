@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Comparator;
 
 public class FastCollinearPoints {
 
@@ -7,7 +6,7 @@ public class FastCollinearPoints {
     private LineSegment[] segment;
 
     public FastCollinearPoints(Point[] points) {
-        if (points == null || Arrays.asList(points).contains(null)) {
+        if (points == null) {
             throw new NullPointerException();
         }
 
@@ -26,9 +25,7 @@ public class FastCollinearPoints {
             Point[] copyPoints = Arrays.copyOf(points, points.length);
             double[] copySlopeArr = Arrays.copyOf(slopeArr, slopeArr.length);
 
-            Comparator<Point> SLOPE_ORDER = origin.slopeOrder;
-
-            Arrays.sort(copyPoints, SLOPE_ORDER);
+            Arrays.sort(copyPoints, origin.slopeOrder());
             Arrays.sort(copySlopeArr);
 
             for (int k = 0; k < points.length - 3; k++) {
@@ -48,17 +45,23 @@ public class FastCollinearPoints {
     }
 
     public static void main(String[] args) {
-        Point[] foo = new Point[6];
+        Point[] foo = new Point[16];
         foo[0] = new Point(1, 1);
-        foo[1] = new Point(2, 2);
-        foo[2] = new Point(3, 3);
-        foo[3] = new Point(4, 4);
+        foo[1] = new Point(1, 2);
+        foo[2] = new Point(1, 3);
+        foo[3] = new Point(1, 4);
         foo[4] = new Point(2, 1);
-        foo[5] = new Point(2, 3);
-//        foo[6] = new Point(2, 4);
-//        foo[7] = new Point(1, 3);
-//        foo[8] = new Point(4, 3);
-//        foo[9] = new Point(4, 5);
+        foo[5] = new Point(2, 2);
+        foo[6] = new Point(2, 3);
+        foo[7] = new Point(2, 4);
+        foo[8] = new Point(3, 1);
+        foo[9] = new Point(3, 2);
+        foo[10] = new Point(3, 3);
+        foo[11] = new Point(3, 4);
+        foo[12] = new Point(4, 1);
+        foo[13] = new Point(4, 2);
+        foo[14] = new Point(4, 3);
+        foo[15] = new Point(4, 4);
 
         FastCollinearPoints fcp = new FastCollinearPoints(foo);
         System.out.println(fcp.numberOfSegments());
