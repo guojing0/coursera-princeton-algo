@@ -10,30 +10,25 @@ public class BruteCollinearPoints {
             throw new NullPointerException();
         }
 
-        int len = points.length;
-        Point[] seg = new Point[len];
-        segment = new LineSegment[len];
+        segment = new LineSegment[points.length];
 
-        for (int i = 0; i < len; i++) {
-            seg[i] = points[i];
-        }
-
-        for (int p = 0; p < len; p++) {
-            for (int q = p + 1; q < len; q++) {
-                double pqSlope = seg[p].slopeTo(seg[q]);
+        for (int p = 0; p < points.length; p++) {
+            for (int q = p + 1; q < points.length; q++) {
+                double pqSlope = points[p].slopeTo(points[q]);
                 if (pqSlope == Double.NEGATIVE_INFINITY) {
                     throw new IllegalArgumentException();
                 }
-                for (int r = p + 2; r < len; r++) {
-                    double prSlope = seg[p].slopeTo(seg[r]);
+                for (int r = q + 1; r < points.length; r++) {
+                    double prSlope = points[p].slopeTo(points[r]);
                     if (pqSlope != prSlope) {
                         continue;
                     }
-                    for (int s = p + 3; s < len; s++) {
-                        if (pqSlope == prSlope && pqSlope == seg[p].slopeTo(seg[s])) {
-                            Point[] temp = {seg[p], seg[q], seg[r], seg[s]};
+                    for (int s = r + 1; s < points.length; s++) {
+                        if (pqSlope == prSlope && pqSlope == points[p].slopeTo(points[s])) {
+                            Point[] temp = {points[p], points[q], points[r], points[s]};
                             Arrays.sort(temp);
-                            segment[num++] = new LineSegment(temp[0], temp[3]);
+                            segment[p] = new LineSegment(temp[0], temp[3]);
+                            num++;
                         }
                     }
                 }
@@ -46,22 +41,7 @@ public class BruteCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        return Arrays.copyOf(segment, segment.length);
+        return Arrays.copyOf(segment, num);
     }
 
-    public static void main(String[] args) {
-        Point[] foo = new Point[8];
-        foo[0] = new Point(1, 1);
-        foo[1] = new Point(2, 2);
-        foo[2] = new Point(3, 3);
-        foo[3] = new Point(4, 4);
-        foo[4] = new Point(5, 5);
-        foo[5] = new Point(1, 2);
-        foo[6] = new Point(2, 1);
-        foo[7] = new Point(4, 5);
-
-        BruteCollinearPoints bcp = new BruteCollinearPoints(foo);
-        System.out.println(bcp.numberOfSegments());
-        System.out.println(Arrays.toString(bcp.segments()));
-    }
 }
