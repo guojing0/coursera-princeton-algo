@@ -6,7 +6,7 @@ public class BruteCollinearPoints {
     private LineSegment[] segment;
 
     public BruteCollinearPoints(Point[] points) {
-        if (points == null || Arrays.asList(points).contains(null)) {
+        if (points == null) {
             throw new NullPointerException();
         }
 
@@ -25,10 +25,7 @@ public class BruteCollinearPoints {
                     }
                     for (int s = r + 1; s < points.length; s++) {
                         if (pqSlope == prSlope && pqSlope == points[p].slopeTo(points[s])) {
-                            Point[] temp = {points[p], points[q], points[r], points[s]};
-                            Arrays.sort(temp);
-                            segment[p] = new LineSegment(temp[0], temp[3]);
-                            num++;
+                            segment[num++] = new LineSegment(points[p], points[s]);
                         }
                     }
                 }
@@ -42,6 +39,30 @@ public class BruteCollinearPoints {
 
     public LineSegment[] segments() {
         return Arrays.copyOf(segment, num);
+    }
+
+    public static void main(String[] args) {
+        Point[] foo = new Point[16];
+        foo[0] = new Point(1, 1);
+        foo[1] = new Point(1, 2);
+        foo[2] = new Point(1, 3);
+        foo[3] = new Point(1, 4);
+        foo[4] = new Point(2, 1);
+        foo[5] = new Point(2, 2);
+        foo[6] = new Point(2, 3);
+        foo[7] = new Point(2, 4);
+        foo[8] = new Point(3, 1);
+        foo[9] = new Point(3, 2);
+        foo[10] = new Point(3, 3);
+        foo[11] = new Point(3, 4);
+        foo[12] = new Point(4, 1);
+        foo[13] = new Point(4, 2);
+        foo[14] = new Point(4, 3);
+        foo[15] = new Point(4, 4);
+
+        BruteCollinearPoints bcp = new BruteCollinearPoints(foo);
+        System.out.println(bcp.numberOfSegments());
+        System.out.println(Arrays.toString(bcp.segments()));
     }
 
 }
