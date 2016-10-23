@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.Arrays;
 
@@ -19,7 +18,6 @@ public class FastCollinearPoints {
 
         for (int i = 0; i < points.length; i++) {
             Point origin = points[i];
-
             for (int j = i + 1; j < points.length; j++) {
                 if (origin == points[j]) {
                     throw new IllegalArgumentException();
@@ -35,7 +33,13 @@ public class FastCollinearPoints {
 
             for (int k = i; k < points.length - 3; k++) {
                 if (copySlopeArr[k] == copySlopeArr[k + 1] && copySlopeArr[k] == copySlopeArr[k + 2]) {
-                    segment[num++] = new LineSegment(origin, copyPoints[k + 3]);
+                    Point[] temp = {copyPoints[k + 1], copyPoints[k + 2], copyPoints[k + 3]};
+                    Arrays.sort(temp);
+                    if (origin.isSmaller(temp[0])) {
+                        segment[num++] = new LineSegment(origin, temp[2]);
+                    } else {
+                        segment[num++] = new LineSegment(origin, temp[0]);
+                    }
                 }
             }
         }
@@ -59,20 +63,31 @@ public class FastCollinearPoints {
             points[i] = new Point(x, y);
         }
 
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setXscale(0, 32768);
-        StdDraw.setYscale(0, 32768);
-        for (Point p : points) {
-            p.draw();
-        }
-        StdDraw.show();
-
         FastCollinearPoints collinear = new FastCollinearPoints(points);
         for (LineSegment segment : collinear.segments()) {
             StdOut.println(segment);
-            segment.draw();
         }
-        StdDraw.show();
+
+        Point[] foo = new Point[16];
+        foo[0] = new Point(1, 1);
+        foo[1] = new Point(1, 2);
+        foo[2] = new Point(1, 3);
+        foo[3] = new Point(1, 4);
+        foo[4] = new Point(2, 1);
+        foo[5] = new Point(2, 2);
+        foo[6] = new Point(2, 3);
+        foo[7] = new Point(2, 4);
+        foo[8] = new Point(3, 1);
+        foo[9] = new Point(3, 2);
+        foo[10] = new Point(3, 3);
+        foo[11] = new Point(3, 4);
+        foo[12] = new Point(4, 1);
+        foo[13] = new Point(4, 2);
+        foo[14] = new Point(4, 3);
+        foo[15] = new Point(4, 4);
+        FastCollinearPoints fcp = new FastCollinearPoints(foo);
+        System.out.println(fcp.numberOfSegments());
+        System.out.println(Arrays.toString(fcp.segments()));
     }
 
 }

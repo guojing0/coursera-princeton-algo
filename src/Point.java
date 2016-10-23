@@ -90,6 +90,10 @@ public class Point implements Comparable<Point> {
         }
     }
 
+    public boolean isSmaller(Point that) {
+        return (this.x < that.x && this.y <= that.y) || (this.x <= that.x && this.y < that.y);
+    }
+
     /**
      * Compares two points by the slope they make with this point.
      * The slope is defined as in the slopeTo() method.
