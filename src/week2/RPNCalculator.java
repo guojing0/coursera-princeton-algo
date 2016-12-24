@@ -1,13 +1,20 @@
 package week2;
 
+import java.util.Scanner;
+
 public class RPNCalculator {
 
     public static void main(String[] args) {
-        LinkedListStack<Double> val = new LinkedListStack<>();
+        System.out.println(calc(InfixToPostfix.transform(args)));
+    }
 
-        for (int i = 0; i < args.length; i++) {
+    public static double calc(String expr) {
+        LinkedListStack<Double> val = new LinkedListStack<>();
+        Scanner scanner = new Scanner(expr);
+
+        while (scanner.hasNext()) {
             double val1, val2;
-            String str = args[i];
+            String str = scanner.next();
 
             if (str.equals("+")) {
                 val.push(val.pop() + val.pop());
@@ -30,7 +37,7 @@ public class RPNCalculator {
                 val.push(Double.parseDouble(str));
             }
         }
-        System.out.println(val.pop());
+        return val.pop();
     }
 
 }
