@@ -2,6 +2,10 @@ package week2;
 
 public class InfixToPostfix {
 
+    public static void main(String[] args) {
+        System.out.println(transform(args));
+    }
+
     public static String transform(String[] str) {
         LinkedListQueue<String> res = new LinkedListQueue<>();
         LinkedListStack<String> temp = new LinkedListStack<>();
