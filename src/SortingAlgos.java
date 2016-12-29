@@ -1,4 +1,6 @@
+import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 
 import java.util.Arrays;
 
@@ -15,9 +17,11 @@ public class SortingAlgos {
     }
 
     public static void selectionSort(Comparable[] arr) {
-        for (int i = 0; i < arr.length; i++) {
+        int len = arr.length;
+
+        for (int i = 0; i < len; i++) {
             int min = i;
-            for (int j = i + 1; j < arr.length; j++) {
+            for (int j = i + 1; j < len; j++) {
                 if (less(arr[j], arr[min])) {
                     min = j;
                 }
@@ -27,31 +31,72 @@ public class SortingAlgos {
     }
 
     public static void insertionSort(Comparable[] arr) {
-        for (int i = 1; i < arr.length; i++) {
+        int len = arr.length;
+
+        for (int i = 1; i < len; i++) {
             for (int j = i; j > 0; j--) {
                 if (less(arr[j], arr[j - 1])) {
-                    swap(arr, j, j - 1);
-                } else {
-                    break;
+                    swap(arr, j - 1, j);
                 }
             }
         }
     }
 
+    public static void insertionSortWithSentinel(Comparable[] arr) {
+        int len = arr.length;
+
+        int minIndex = 0;
+        for (int i = 1; i < len; i++) {
+            if (less(arr[i], arr[minIndex])) minIndex = i;
+        }
+        swap(arr, 0, minIndex);
+
+        for (int i = 1; i < len; i++) {
+            int j = i;
+            while (less(arr[j], arr[j - 1])) {
+                swap(arr, j - 1, j);
+                j--;
+            }
+        }
+    }
+
+    public static void insertionSortWithoutSwap(Comparable[] arr) {
+        int len = arr.length;
+
+        int minIndex = 0;
+        for (int i = 1; i < len; i++) {
+            if (less(arr[i], arr[minIndex])) minIndex = i;
+        }
+        swap(arr, 0, minIndex);
+
+        for (int i = 1; i < len; i++) {
+            Comparable v = arr[i];
+            int j = i;
+            while (less(v, arr[j - 1])) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = v;
+        }
+    }
+
     public static void shellSort(Comparable[] arr) {
+        int len = arr.length;
         int h = 1;
 
-        while (h < arr.length / 3) {
-            h = 3 * h + 1;
+        while (h < len / 3) {
+            h = h * 3 + 1;
         }
 
         while (h >= 1) {
-            for (int i = h; i < arr.length; i++) {
-                for (int j = i; j >= h && less(arr[j], arr[j - h]); j -= h) {
-                    swap(arr, j, j - h);
+            for (int i = h; i < len; i++) {
+                for (int j = i; j >= h; j -= h) {
+                    if (less(arr[j], arr[j - h])) {
+                        swap(arr, j - h, j);
+                    }
                 }
             }
-            h /= 3;
+            h = h / 3;
         }
     }
 
@@ -62,11 +107,17 @@ public class SortingAlgos {
     }
 
     public static void main(String[] args) {
-        Comparable[] foo = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int N = 10000;
+        Comparable[] foo = new Comparable[N];
+        for (int i = 0; i < N; i++) {
+            foo[i] = i;
+        }
+//        System.out.println(Arrays.toString(foo));
+        StdRandom.shuffle(foo);
         System.out.println(Arrays.toString(foo));
-        shuffle(foo);
-        System.out.println(Arrays.toString(foo));
-        shellSort(foo);
+        Stopwatch timer = new Stopwatch();
+        insertionSortWithSentinel(foo);
+        StdOut.println(timer.elapsedTime());
         System.out.println(Arrays.toString(foo));
     }
 }
