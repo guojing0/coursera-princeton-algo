@@ -36,6 +36,6 @@ public class SortCompare extends SortingAlgos {
         double t1 = timeRandomInput(a, alg1, T);
         double t2 = timeRandomInput(b, alg2, T);
 
-        StdOut.printf("For %d random doubles, %s is %.2f times faster than %s\n", N, alg1, t2/t1, alg2);
+        StdOut.printf("For %d random doubles, %s is %.3f times faster than %s\n", N, alg1, t2/t1, alg2);
     }
 }

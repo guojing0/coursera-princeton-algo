@@ -3,7 +3,6 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class SortingAlgos {
 
@@ -101,13 +100,8 @@ public class SortingAlgos {
         }
     }
 
-    public static void merge(Comparable[] arr, int lo, int mid, int hi) {
+    public static void merge(Comparable[] arr, Comparable[] aux, int lo, int mid, int hi) {
         int i = lo, j = mid + 1;
-        Comparable[] aux = new Comparable[arr.length];
-
-        for (int k = lo; k < hi + 1; k++) {
-            aux[k] = arr[k];
-        }
 
         for (int k = lo; k < hi + 1; k++) {
             if (i > mid) {
@@ -122,16 +116,34 @@ public class SortingAlgos {
         }
     }
 
-    public static void mergeSort(Comparable[] arr, int lo, int hi) {
+    public static void mergeSort(Comparable[] arr, Comparable[] aux, int lo, int hi) {
         if (lo >= hi) return;
         int mid = lo + (hi - lo) / 2;
-        mergeSort(arr, lo, mid);
-        mergeSort(arr, mid + 1, hi);
-        merge(arr, lo, mid, hi);
+
+        mergeSort(aux, arr, lo, mid);
+        mergeSort(aux, arr, mid + 1, hi);
+
+//        if (!less(arr[mid + 1], arr[mid])) { // skip if arr[mid] <= arr[mid + 1]
+//            System.arraycopy(arr, lo, aux, lo, hi - lo + 1);
+//            return;
+//        }
+        merge(arr, aux, lo, mid, hi);
     }
 
     public static void mergeSort(Comparable[] arr) {
-        mergeSort(arr, 0, arr.length - 1);
+        Comparable[] aux = arr.clone();
+        mergeSort(arr, aux, 0, arr.length - 1);
+    }
+
+    public static void bottomUpMergeSort(Comparable[] arr) {
+        int len = arr.length;
+        Comparable[] aux = new Comparable[arr.length];
+
+        for (int sz = 1; sz < len; sz *= 2) {
+            for (int lo = 0; lo < len - sz; lo += sz + sz) {
+                merge(arr, aux, lo, lo + sz - 1, Math.min(lo + sz + sz - 1, len - 1));
+            }
+        }
     }
 
     public static void shuffle(Comparable[] arr) {
@@ -140,18 +152,8 @@ public class SortingAlgos {
         }
     }
 
-    public static void bottomUpMergeSort(Comparable[] arr) {
-        int len = arr.length;
-
-        for (int sz = 1; sz < len; sz *= 2) {
-            for (int lo = 0; lo < len - sz; lo += sz + sz) {
-                merge(arr, lo, lo + sz - 1, Math.min(lo + sz + sz - 1, len - 1));
-            }
-        }
-    }
-
     public static void main(String[] args) {
-        int N = 50000;
+        int N = 10;
         Comparable[] foo = new Comparable[N];
         for (int i = 0; i < N; i++) {
             foo[i] = i;
@@ -160,7 +162,7 @@ public class SortingAlgos {
         StdRandom.shuffle(foo);
         System.out.println(Arrays.toString(foo));
         Stopwatch timer = new Stopwatch();
-        shellSort(foo);
+        mergeSort(foo);
         StdOut.println(timer.elapsedTime());
         System.out.println(Arrays.toString(foo));
     }
